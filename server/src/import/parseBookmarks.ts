@@ -1,3 +1,4 @@
+import { decodeEntities } from "../util/decodeEntities";
 export interface ParsedBookmark {
   url: string;
   title: string;
@@ -64,14 +65,3 @@ function toIsoDate(unixSeconds: string | null): string | null {
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
-function decodeEntities(text: string): string {
-  return text
-    .replace(/&#(\d+);/g, (_, code) => {
-      const n = Number(code);
-      return n <= 0x10ffff ? String.fromCodePoint(n) : "";
-    })
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&amp;/g, "&");
-}
