@@ -1,7 +1,9 @@
 import { createApp } from "./app";
+import { config } from "./config";
+import { openDatabase } from "./db/database";
 
-const PORT = 3001;
+const db = openDatabase(config.dbPath);
 
-createApp().listen(PORT, () => {
-  console.log(`Actwise server listening on http://localhost:${PORT}`);
+createApp(db).listen(config.port, () => {
+  console.log(`Actwise server listening on http://localhost:${config.port}`);
 });
