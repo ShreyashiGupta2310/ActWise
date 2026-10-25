@@ -43,7 +43,7 @@ function App() {
 
   return (
     <main>
-      <h1>Actwise</h1>
+      <h1>ActWise</h1>
       <p className="tagline">Know what matters. Act on it.</p>
 
       {data?.modelProblem && (
