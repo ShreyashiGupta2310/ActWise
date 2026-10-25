@@ -6,4 +6,8 @@ export const config = {
     process.env.ACTWISE_DB_PATH ??
     path.resolve(__dirname, "..", "data", "actwise.db"),
   maxImportBytes: "10mb",
+
+  workerEnabled: process.env.ACTWISE_WORKER !== "off",
+  workerDelayMs: 2000,
+  workerIdlePollMs: 5000,
 };
