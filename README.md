@@ -1,8 +1,8 @@
-# Actwise
+# ActWise
 
 Know what matters. Act on it.
 
-Actwise is my entry for the Hacktoberfest Open-Source AI Challenge, Week 3 (Slow and Steady).
+ActWise is my entry for the Hacktoberfest Open-Source AI Challenge, Week 3 (Slow and Steady).
 
 It reads your Chrome bookmarks, uses a small open-weight model running on your own laptop to understand each saved page, and shows at most three things worth acting on. The rest of the pile stays out of the way.
 
