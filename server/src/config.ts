@@ -10,4 +10,15 @@ export const config = {
   workerEnabled: process.env.ACTWISE_WORKER !== "off",
   workerDelayMs: 2000,
   workerIdlePollMs: 5000,
+  workerModelRetryMs: 30_000,
+
+  ollamaUrl: process.env.OLLAMA_URL ?? "http://127.0.0.1:11434",
+  model: process.env.ACTWISE_MODEL ?? "gemma3:4b",
+  ollamaTimeoutMs: 240_000,
+
+  goals: (process.env.ACTWISE_GOALS ??
+    "internship,frontend,react,typescript,hackathon,open source")
+    .split(",")
+    .map((g) => g.trim().toLowerCase())
+    .filter(Boolean),
 };
