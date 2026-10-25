@@ -64,3 +64,97 @@ ul.items li:first-child {
   color: #5b6475;
   font-size: 13px;
 }
+
+.item-card {
+  border: 1px solid #e3e6eb;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 14px 0;
+  background: #fcfcfd;
+}
+
+.item-card h3 {
+  margin: 6px 0 2px;
+  font-size: 18px;
+}
+
+.pill {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3b4a8a;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.muted {
+  color: #5b6475;
+}
+
+.deadline.ok {
+  color: #12703a;
+}
+
+.deadline.warn {
+  color: #8a5a00;
+}
+
+.checked {
+  background: #f3f6f9;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 10px 0;
+}
+
+ul.reasons {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.next {
+  font-weight: 500;
+}
+
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btns button {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #c9ced8;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btns button.primary {
+  background: #1f2430;
+  color: #fff;
+  border-color: #1f2430;
+}
+
+.btns button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.banner {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #fff7e0;
+  border: 1px solid #f0d58a;
+  margin-bottom: 16px;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
+}

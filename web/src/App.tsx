@@ -1,51 +1,102 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchItems, type ItemsResponse } from "./api";
+import { fetchToday, sendAction, type Action, type TodayResponse } from "./api";
 import { ImportBox } from "./components/ImportBox";
+import { ItemCard } from "./components/ItemCard";
+import { NeedsLook } from "./components/NeedsLook";
 
 function App() {
-  const [data, setData] = useState<ItemsResponse | null>(null);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [data, setData] = useState<TodayResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<number | null>(null);
 
   const load = useCallback(() => {
-    fetchItems()
+    fetchToday()
       .then((response) => {
         setData(response);
-        setLoadError(null);
+        setError(null);
       })
-      .catch((e) => setLoadError(e instanceof Error ? e.message : "Could not load items."));
+      .catch((e) => setError(e instanceof Error ? e.message : "Could not load Today."));
   }, []);
 
   useEffect(() => {
     load();
   }, [load]);
 
+  const waiting = data?.counts.waiting ?? 0;
+  useEffect(() => {
+    if (waiting === 0) return;
+    const timer = setInterval(load, 5000);
+    return () => clearInterval(timer);
+  }, [waiting, load]);
+
+  async function handleAction(id: number, action: Action) {
+    setBusyId(id);
+    try {
+      await sendAction(id, action);
+      load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "That did not work.");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   return (
     <main>
       <h1>Actwise</h1>
       <p className="tagline">Know what matters. Act on it.</p>
 
-      <ImportBox onImported={load} />
+      {data?.modelProblem && (
+        <p className="banner">
+          The local AI model is not available ({data.modelProblem}). Start Ollama and check the
+          model name. Actwise will keep trying.
+        </p>
+      )}
 
       <section className="card">
-        <h2>Saved so far{data ? `: ${data.total}` : ""}</h2>
-        {loadError && <p className="error">{loadError}</p>}
-        {data && data.total === 0 && <p className="hint">Nothing yet. Import your bookmarks above.</p>}
+        <h2>Today</h2>
+        {error && <p className="error">{error}</p>}
+
         {data && data.items.length > 0 && (
-          <ul className="items">
+          <>
             {data.items.map((item) => (
-              <li key={item.id}>
-                <a href={item.url} target="_blank" rel="noreferrer">
-                  {item.title}
-                </a>
-                <div className="folder">
-                  {item.folderPath || "No folder"}
-                  {item.savedAt ? ` · saved ${new Date(item.savedAt).toLocaleDateString()}` : ""}
-                </div>
-              </li>
+              <ItemCard key={item.id} item={item} busy={busyId === item.id} onAction={handleAction} />
             ))}
-          </ul>
+            {data.counts.ready > data.items.length && (
+              <p className="hint">
+                {data.counts.ready - data.items.length} more are ready. Finish or drop one of these
+                to see the next.
+              </p>
+            )}
+          </>
         )}
+
+        {data && data.items.length === 0 && data.counts.total === 0 && (
+          <p className="hint">Nothing saved yet. Import your Chrome bookmarks below.</p>
+        )}
+
+        {data && data.items.length === 0 && data.counts.total > 0 && waiting > 0 && (
+          <p className="hint">
+            Reading your saved pages slowly ({waiting} left). Cards appear here as they are ready.
+          </p>
+        )}
+
+        {data && data.items.length === 0 && data.counts.total > 0 && waiting === 0 && (
+          <p className="hint">
+            Nothing here clearly matches your goals right now. That is okay.
+          </p>
+        )}
+
+        {data && data.items.length > 0 && waiting > 0 && (
+          <p className="hint">Still reading {waiting} more pages in the background.</p>
+        )}
+
+        {data && <p className="hint">Goals used for matching: {data.goals.join(", ")}.</p>}
       </section>
+
+      <ImportBox onImported={load} />
+
+      {data && <NeedsLook items={data.needsLook} total={data.counts.needsLook} />}
     </main>
   );
 }
