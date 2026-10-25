@@ -123,3 +123,6 @@ On my machine the last run showed 16 test files and 105 tests passing, typecheck
 ## License
 
 MIT for the code (see LICENSE). Model licenses are separate.
+
+## Commits after the deadline
+None so far. I will list any here.
