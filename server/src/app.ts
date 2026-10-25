@@ -3,11 +3,18 @@ import type { Db } from "./db/database";
 import { createImportRouter } from "./routes/importRoute";
 import { createItemsRouter } from "./routes/itemsRoute";
 import { createStatusRouter } from "./routes/statusRoute";
+import { createTodayRouter } from "./routes/todayRoute";
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err?.type === "entity.too.large") {
     res.status(413).json({
       error: { code: "TOO_LARGE", message: "That file is too large to import." },
+    });
+    return;
+  }
+  if (err?.type === "entity.parse.failed") {
+    res.status(400).json({
+      error: { code: "BAD_JSON", message: "That request was not valid JSON." },
     });
     return;
   }
@@ -26,6 +33,8 @@ export function createApp(db: Db) {
   app.use("/api/import", createImportRouter(db));
   app.use("/api/items", createItemsRouter(db));
   app.use("/api/status", createStatusRouter(db));
+  app.use("/api/today", createTodayRouter(db));
+
   app.use(errorHandler);
 
   return app;
