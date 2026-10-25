@@ -13,8 +13,10 @@ if (config.workerEnabled) {
   startWorker(db, {
     delayMs: config.workerDelayMs,
     idlePollMs: config.workerIdlePollMs,
+    modelRetryMs: config.workerModelRetryMs,
   });
   console.log("Background reader is on: it visits your saved links slowly, one at a time.");
+  console.log(`Local model: ${config.model} via Ollama at ${config.ollamaUrl}`);
 } else {
   console.log("Background reader is off.");
 }

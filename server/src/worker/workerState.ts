@@ -1,0 +1,1 @@
+export const workerState: { modelProblem: string | null } = { modelProblem: null };

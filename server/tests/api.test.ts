@@ -51,7 +51,7 @@ describe("API", () => {
     expect(res.status).toBe(422);
     expect(res.body.error.code).toBe("NO_BOOKMARKS_FOUND");
   });
-    it("reports how far the page reading has got", async () => {
+      it("reports how far the work has got", async () => {
     const app = freshApp();
     await request(app)
       .post("/api/import")
@@ -62,6 +62,8 @@ describe("API", () => {
     expect(res.body).toEqual({
       total: 7,
       pages: { pending: 7, done: 0, failed: 0, failureReasons: {} },
+      analysis: { pending: 7, done: 0, failed: 0, failureReasons: {} },
+      modelProblem: null,
     });
   });
 });
